@@ -5,6 +5,7 @@ use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
+    //TODO: if args.len == 1 -> read STDIN
     if args.len() != 2 {
         println!("Invalid number of arguments");
         return;
@@ -46,6 +47,9 @@ fn main() {
     if degree != 0 {
         println!("Polynomial degree: {}", degree);
     }
+
+    //TODO: solve ^^
+
     return;
 }
 
