@@ -1,7 +1,6 @@
-use crate::math_utils;
 
 //TODO : out of bound where arg = "0"
-fn parse_polynomial(arg: &str, polynomial: &mut math_utils::Polynomial) -> bool {
+fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
     let mut mult: f64 = 1.0; //if no sign at beginning -> sign is +
     // let mut coef: f64 = 0.0;
 
@@ -58,29 +57,20 @@ fn parse_polynomial(arg: &str, polynomial: &mut math_utils::Polynomial) -> bool 
         if !chars[i].is_digit(10) {
             eprintln!("Invalid Expression5");
             return false;
-        } else if chars[i] > '2' {
-            //TODO: fix bad format according to the subject
-            eprintln!("Polynomial degree: {}", chars[i]);
-            eprintln!("The polynomial degree is strictly greater than 2, I can't solve.Invalid Expression");
-            return false;
         }
-        if chars[i] == '0' {
-            polynomial.c = coef;
-        } else if chars[i] == '1' {
-            polynomial.b = coef;
-        } else if chars[i] == '2' {
-            polynomial.a = coef;
-        }
+        
+        coefs[(chars[i] as usize) - ('0' as usize)] = coef;
+
         i += 1
     }
     return true;
 }
 
-pub fn parse_argument(arg: &String) -> (bool, math_utils::Polynomial, math_utils::Polynomial)
+pub fn parse_argument(arg: &String) -> (bool, [f64; 10], [f64; 10])
 {
 
-    let mut left: math_utils::Polynomial = math_utils::Polynomial{a:0.0, b:0.0, c:0.0};
-    let mut right: math_utils::Polynomial = math_utils::Polynomial{a:0.0, b:0.0, c:0.0};
+    let mut left_coefs: [f64; 10] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+    let mut right_coefs: [f64; 10] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
 
     let trimmed = arg.trim().replace(" ", "");
@@ -88,14 +78,14 @@ pub fn parse_argument(arg: &String) -> (bool, math_utils::Polynomial, math_utils
     let cleaned = trimmed.split_once('=');
     match cleaned {
         Some((left_str, right_str)) => {
-            if !parse_polynomial(left_str, &mut left) || !parse_polynomial(right_str, &mut right) {
-                return (false, left, right);
+            if !parse_polynomial(left_str, &mut left_coefs) || !parse_polynomial(right_str, &mut right_coefs) {
+                return (false, left_coefs, right_coefs);
             }
         }
         None => {
             eprintln!("Expression must have an = symbol");
-            return (false, left, right);  // No '=' found
+            return (false, left_coefs, right_coefs);  // No '=' found
         }
     }
-    return (true, left, right);
+    return (true, left_coefs, right_coefs);
 }
