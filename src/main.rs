@@ -17,7 +17,7 @@ fn main() {
     let left: [f64; 10] = res_parsing.1;
     let right: [f64; 10] = res_parsing.2;
 
-    // Reduced form
+    // Get reduced form
     let reduced_polynomial: [f64; 10] = [
         left[0] - right[0],
         left[1] - right[1],
@@ -30,9 +30,8 @@ fn main() {
         left[8] - right[8],
         left[9] - right[9]
     ];
-    print_reduced_form(reduced_polynomial);
 
-    // Degree of polynomial
+    // Get degree of polynomial
     let mut index: usize = 0;
     let mut degree: i64 = 0;
     while index <= 9 {
@@ -41,22 +40,25 @@ fn main() {
         }
         index += 1;
     }
-    println!("Polynomial degree: {}", degree);
+
+    // Print
+    print_reduced_form(reduced_polynomial, degree as usize);
+    if degree != 0 {
+        println!("Polynomial degree: {}", degree);
+    }
     return;
 }
 
-fn print_reduced_form(reduced_polynomial: [f64; 10]) {
+fn print_reduced_form(reduced_polynomial: [f64; 10], degree: usize) {
     print!("Reduced form: ");
     let mut index: usize = 0;
-    while index < 10 {
-        if reduced_polynomial[index].abs() > f64::EPSILON {
-            if reduced_polynomial[index] < 0.0 {
-                print!("- ");
-            } else if index != 0 {
-                print!("+ ");
-            }
-            print!("{} * X^{} ", reduced_polynomial[index].abs(), index);
+    while index <= degree {
+        if reduced_polynomial[index] < 0.0 {
+            print!("- ");
+        } else if index != 0 {
+            print!("+ ");
         }
+        print!("{} * X^{} ", reduced_polynomial[index].abs(), index);
         index += 1;
     }
     println!("= 0");

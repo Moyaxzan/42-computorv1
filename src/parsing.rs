@@ -1,5 +1,3 @@
-
-//TODO : out of bound where arg = "0"
 fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
     let mut mult: f64 = 1.0; //if no sign at beginning -> sign is +
     // let mut coef: f64 = 0.0;
@@ -14,7 +12,7 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
             mult = 1.0;
             i += 1;
         } else if i != 0 || !chars[i].is_digit(10) { // no sign only allowed for 1st elem
-            eprintln!("Invalid Expression1");
+            eprintln!("Invalid Expression: Expected sign");
             return false;
         }
 
@@ -39,29 +37,26 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
             }
         };
 
-        if chars[i] != '*' {
-            eprintln!("Invalid Expression2");
-            return false;
+        if i < chars.len() && chars[i] == '*' {
+            i += 1;
+            if i == chars.len() || chars[i] != 'X' && chars[i] != 'x' {
+                eprintln!("Invalid Expression: Expected X");
+                return false;
+            }
+            i += 1;
+            if i == chars.len() || chars[i] != '^' {
+                eprintln!("Invalid Expression: Expected ^");
+                return false;
+            }
+            i += 1;
+            if i == chars.len() || !chars[i].is_digit(10) {
+                eprintln!("Invalid Expression: Expected exponent");
+                return false;
+            }
+            
+            coefs[(chars[i] as usize) - ('0' as usize)] = coef;
+            i += 1
         }
-        i += 1;
-        if chars[i] != 'X' && chars[i] != 'x' {
-            eprintln!("Invalid Expression3");
-            return false;
-        }
-        i += 1;
-        if chars[i] != '^' {
-            eprintln!("Invalid Expression4");
-            return false;
-        }
-        i += 1;
-        if !chars[i].is_digit(10) {
-            eprintln!("Invalid Expression5");
-            return false;
-        }
-        
-        coefs[(chars[i] as usize) - ('0' as usize)] = coef;
-
-        i += 1
     }
     return true;
 }
