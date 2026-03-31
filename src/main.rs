@@ -16,7 +16,13 @@ fn main() {
     }
     let left = res_parsing.1;
     let right = res_parsing.2;
-    dbg!(left.a, left.b, left.c);
-    dbg!(right.a, right.b, right.c);
+    let final_polynomial = math_utils::Polynomial{a:left.a - right.a, b:left.b - right.b, c:left.c - right.c};
+    //TODO: bad formatting with negative numbers according to the subject
+    println!("Reduced form: {} * X^0 - {} * X^1 + {} * X^2 = 0", final_polynomial.c, final_polynomial.b, final_polynomial.a);
+    if (final_polynomial.a.round() - 0.0).abs() > f64::EPSILON {
+        println!("Polynomial degree: 2");
+    } else if (final_polynomial.b.round() - 0.0).abs() > f64::EPSILON {
+        println!("Polynomial degree: 1");
+    }
     return;
 }

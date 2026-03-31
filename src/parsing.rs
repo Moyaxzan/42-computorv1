@@ -1,5 +1,6 @@
 use crate::math_utils;
 
+//TODO : out of bound where arg = "0"
 fn parse_polynomial(arg: &str, polynomial: &mut math_utils::Polynomial) -> bool {
     let mut mult: f64 = 1.0; //if no sign at beginning -> sign is +
     // let mut coef: f64 = 0.0;
@@ -58,6 +59,7 @@ fn parse_polynomial(arg: &str, polynomial: &mut math_utils::Polynomial) -> bool 
             eprintln!("Invalid Expression5");
             return false;
         } else if chars[i] > '2' {
+            //TODO: fix bad format according to the subject
             eprintln!("Polynomial degree: {}", chars[i]);
             eprintln!("The polynomial degree is strictly greater than 2, I can't solve.Invalid Expression");
             return false;
