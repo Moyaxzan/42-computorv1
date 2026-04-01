@@ -1,17 +1,17 @@
 mod math_utils;
 mod parsing;
+mod solve;
 use std::env;
 use std::io::{self, Read};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    //TODO: if args.len == 1 -> read STDIN
     let mut expr: String = String::new();
     if args.len() > 2 {
         println!("Invalid number of arguments");
         return;
-    } else if args.len() == 1 {
+    } else if args.len() == 1 { // Read STDIN when no arguments given
         let stdin = io::stdin();
         let mut handle = stdin.lock();
         match handle.read_to_string(&mut expr) {
@@ -61,8 +61,14 @@ fn main() {
     if degree != 0 {
         println!("Polynomial degree: {}", degree);
     }
+    
+    let polynomial = math_utils::Polynomial{
+        a: reduced_polynomial[2],
+        b: reduced_polynomial[1],
+        c: reduced_polynomial[0]
+    };
 
-    //TODO: solve ^^
+    solve::solve(&polynomial);
 
     return;
 }

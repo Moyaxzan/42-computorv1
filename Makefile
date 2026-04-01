@@ -1,7 +1,7 @@
 #####	VARIABLES   #####
 NAME = computor
 
-SRCS = src/main.rs src/parsing.rs src/math_utils.rs
+SRCS = src/main.rs src/parsing.rs src/math_utils.rs src/solve.rs
 
 debug ?= $(info debug is $(debug))
 
