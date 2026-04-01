@@ -1,16 +1,30 @@
 mod math_utils;
 mod parsing;
 use std::env;
+use std::io::{self, Read};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     //TODO: if args.len == 1 -> read STDIN
-    if args.len() != 2 {
+    let mut expr: String = String::new();
+    if args.len() > 2 {
         println!("Invalid number of arguments");
         return;
+    } else if args.len() == 1 {
+        let stdin = io::stdin();
+        let mut handle = stdin.lock();
+        match handle.read_to_string(&mut expr) {
+            Ok(n) => {
+                if n <= 0 {
+                    println!("Error while reading STDIN");
+                }
+            }
+            Err(error) => println!("Error {} while reading STDIN", error),
+        }
+    } else {
+        expr = args[1].clone();
     }
-    let expr: String = args[1].clone();
     let res_parsing = parsing::parse_argument(&expr);
     if res_parsing.0 == false {
         return;
