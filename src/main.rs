@@ -61,6 +61,10 @@ fn main() {
     if degree != 0 {
         println!("Polynomial degree: {}", degree);
     }
+    if degree > 2 {
+        println!("The polynomial degree is strictly greater than 2, I can't solve.");
+        return;
+    }
     
     let polynomial = math_utils::Polynomial{
         a: reduced_polynomial[2],
