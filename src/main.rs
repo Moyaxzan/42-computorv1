@@ -50,7 +50,7 @@ fn main() {
     let mut index: usize = 0;
     let mut degree: i64 = 0;
     while index <= 9 {
-        if left[index].abs() > f64::EPSILON || right[index].abs() > f64::EPSILON {
+        if math_utils::absf(reduced_polynomial[index]) > f64::EPSILON {
             degree = index as i64;
         }
         index += 1;
@@ -82,7 +82,7 @@ fn print_reduced_form(reduced_polynomial: [f64; 10], degree: usize) {
         } else if index != 0 {
             print!("+ ");
         }
-        print!("{} * X^{} ", reduced_polynomial[index].abs(), index);
+        print!("{} * X^{} ", math_utils::absf(reduced_polynomial[index]), index);
         index += 1;
     }
     println!("= 0");

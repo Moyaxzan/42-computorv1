@@ -2,9 +2,9 @@ use crate::math_utils;
 
 pub fn solve(px: &math_utils::Polynomial) -> bool {
 
-    if px.a.abs() < f64::EPSILON { // degree < 2
-        if px.b.abs() < f64::EPSILON { // degree 0 equation
-            if px.c.abs() < f64::EPSILON {
+    if math_utils::absf(px.a) < f64::EPSILON { // degree < 2
+        if math_utils::absf(px.b) < f64::EPSILON { // degree 0 equation
+            if math_utils::absf(px.c) < f64::EPSILON {
                 println!("Any real number is a solution.");
                 return true;
             } else {

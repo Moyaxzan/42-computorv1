@@ -1,6 +1,6 @@
+// TODO : bad behavior -> ./computor "5 + 4 * X^1 + 3* X^2= 2 * X^2"
 fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
     let mut mult: f64 = 1.0; //if no sign at beginning -> sign is +
-    // let mut coef: f64 = 0.0;
 
     let mut i: usize = 0;
     let chars: Vec<char> = arg.chars().collect();
@@ -54,8 +54,10 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
                 return false;
             }
             
-            coefs[(chars[i] as usize) - ('0' as usize)] = coef;
+            coefs[(chars[i] as usize) - ('0' as usize)] += coef;
             i += 1
+        } else if i <= chars.len() {
+            coefs[0] += coef;
         }
     }
     return true;
