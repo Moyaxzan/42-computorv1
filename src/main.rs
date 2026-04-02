@@ -82,7 +82,11 @@ fn print_reduced_form(reduced_polynomial: [f64; 10], degree: usize) {
     let mut index: usize = 0;
     while index <= degree {
         if reduced_polynomial[index] < 0.0 {
-            print!("- ");
+            if index == 0 {
+                print!("-");
+            } else {
+                print!("- ");
+            }
         } else if index != 0 {
             print!("+ ");
         }

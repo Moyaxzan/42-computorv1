@@ -127,7 +127,7 @@ pub fn r_solutions(px: &Polynomial, delta: &f64) -> String {
         format!("{}/{}", num_s2, den)
     };
 
-    return format!("{}\n{}", s1, s2);
+    return format!("{}\n{}", s2, s1);
 }
 
 pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
