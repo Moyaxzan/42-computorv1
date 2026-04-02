@@ -23,6 +23,7 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
         }
         
         if start == i {
+            //TODO parse X^n
             eprintln!("Invalid Expression: Expected number");
             return false;
         }
@@ -45,17 +46,17 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
             }
             i += 1;
             if i == chars.len() || chars[i] != '^' {
-                eprintln!("Invalid Expression: Expected ^");
-                return false;
+                coefs[1] += coef;
+            } else {
+                i += 1;
+                if i == chars.len() || !chars[i].is_digit(10) {
+                    eprintln!("Invalid Expression: Expected exponent");
+                    return false;
+                }
+                
+                coefs[(chars[i] as usize) - ('0' as usize)] += coef;
+                i += 1
             }
-            i += 1;
-            if i == chars.len() || !chars[i].is_digit(10) {
-                eprintln!("Invalid Expression: Expected exponent");
-                return false;
-            }
-            
-            coefs[(chars[i] as usize) - ('0' as usize)] += coef;
-            i += 1
         } else if i <= chars.len() {
             coefs[0] += coef;
         }
