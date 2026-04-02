@@ -22,6 +22,7 @@ pub fn solve(px: &math_utils::Polynomial) -> bool {
 
     if delta > f64::EPSILON {
         println!("Discriminant is stricly positive, the two solutions are:");
+        println!("{}", math_utils::r_solutions(px, &delta));
     } else if delta < -(f64::EPSILON) {
         println!("Discriminant is stricly negative, the two complex solutions are:");
         println!("{}", math_utils::c_solutions(px, &delta));

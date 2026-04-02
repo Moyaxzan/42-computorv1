@@ -88,7 +88,7 @@ fn irr_frac(num: f64, den: f64) -> (i64, i64) {
     let den_num: i64 = den_fact.0;
     let den_den: i64 = den_fact.1;
 
-    let gcd = my_gcd(num_num * den_den, num_den * den_num);
+    let gcd = my_gcd(absi(num_num * den_den), absi(num_den * den_num));
     let mut res_num = num_num * den_den / gcd;
     let mut res_den = num_den * den_num / gcd;
     
@@ -97,6 +97,37 @@ fn irr_frac(num: f64, den: f64) -> (i64, i64) {
         res_den *= -1;
     }
     return (res_num, res_den);
+}
+
+pub fn r_solutions(px: &Polynomial, delta: &f64) -> String {
+    let sqrt_delta = sqrtf(*delta);
+    let num_s1 = -px.b + sqrt_delta;
+    let num_s2 = -px.b - sqrt_delta;
+    let den = 2.0 * px.a;
+
+    let s1_frac = irr_frac(num_s1, den); // -b + √Δ / 2a
+    let s2_frac = irr_frac(num_s2, den); // -b - √Δ / 2a
+    let s1 = if s1_frac.0 / 10000 > 1 ||  s1_frac.1 / 10000 > 1 {
+        format!("{:.6}", num_s1 / den)
+    } else if s1_frac.1 == 1 {
+        format!("{}", s1_frac.0)
+    } else if s1_frac.1 == -1 {
+        format!("{}", -s1_frac.0)
+    } else {
+        format!("{}/{}", s1_frac.0, s1_frac.1)
+    };
+
+    let s2 = if s2_frac.0 / 10000 > 1 ||  s2_frac.1 / 10000 > 1 {
+        format!("{:.6}", num_s2 / den)
+    } else if s2_frac.1 == 1 {
+        format!("{}", s2_frac.0)
+    } else if s2_frac.1 == -1 {
+        format!("{}", -s2_frac.0)
+    } else {
+        format!("{}/{}", num_s2, den)
+    };
+
+    return format!("{}\n{}", s1, s2);
 }
 
 pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
