@@ -131,7 +131,7 @@ pub fn r_solutions(px: &Polynomial, delta: &f64) -> String {
 }
 
 pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
-    let real_frac = irr_frac(- px.b, 2.0 * px.a);
+    let real_frac = irr_frac(-px.b, 2.0 * px.a);
     let comp_frac = irr_frac(sqrtf(absf(*delta)), 2.0 * px.a);
 
     let real_num = real_frac.0;
@@ -139,15 +139,19 @@ pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
     let comp_num = comp_frac.0;
     let comp_den = comp_frac.1;
 
-    let real = if real_den == 1 {
+    let real = if real_num / 1000 > 1 || real_den / 1000 > 1 {
+        format!("{:.6}", -px.b / 2.0 * px.a)
+    } else if real_den == 1 {
         format!("{}", real_num)
-    } else if comp_den == -1 {
-        format!("{}i", -real_num)
+    } else if real_den == -1 {
+        format!("{}", -real_num)
     } else {
         format!("{}/{}", real_num, real_den)
     };
 
-    let comp = if comp_den == 1 {
+    let comp = if comp_num / 1000 > 1 || comp_den / 1000 > 1 {
+        format!("{:.6}i", sqrtf(absf(*delta)) / 2.0 * px.a)
+    } else if comp_den == 1 {
         format!("{}i", comp_num)
     } else if comp_den == -1 {
         format!("{}i", -comp_num)
