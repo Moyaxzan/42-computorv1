@@ -1,4 +1,3 @@
-// TODO : bad behavior -> ./computor "5 + 4 * X^1 + 3* X^2= 2 * X^2"
 fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
     let mut mult: f64 = 1.0; //if no sign at beginning -> sign is +
 
@@ -11,7 +10,7 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
         } else if chars[i] == '+' {
             mult = 1.0;
             i += 1;
-        } else if i != 0 || !chars[i].is_digit(10) { // no sign only allowed for 1st elem
+        } else if i != 0 { // no sign only allowed for 1st elem
             eprintln!("Invalid Expression: Expected sign");
             return false;
         }
@@ -22,43 +21,44 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
             i += 1;
         }
         
-        if start == i {
-            //TODO parse X^n
-            eprintln!("Invalid Expression: Expected number");
-            return false;
-        }
-        
-        // Convert char range to string and parse as f64
-        let number_str: String = chars[start..i].iter().collect();
-        let coef: f64 = match number_str.parse::<f64>() {
-            Ok(n) => n * mult,
-            Err(_) => {
-                eprintln!("Invalid number: {}", number_str);
-                return false;
-            }
-        };
+        let coef;
 
-        if i < chars.len() && chars[i] == '*' {
-            i += 1;
-            if i == chars.len() || chars[i] != 'X' && chars[i] != 'x' {
-                eprintln!("Invalid Expression: Expected X");
-                return false;
-            }
-            i += 1;
-            if i == chars.len() || chars[i] != '^' {
-                coefs[1] += coef;
-            } else {
-                i += 1;
-                if i == chars.len() || !chars[i].is_digit(10) {
-                    eprintln!("Invalid Expression: Expected exponent");
+        //TODO parse X^n
+        if start != i {
+            // Convert char range to string and parse as f64
+            let number_str: String = chars[start..i].iter().collect();
+            coef = match number_str.parse::<f64>() {
+                Ok(n) => n * mult,
+                Err(_) => {
+                    eprintln!("Invalid number: {}", number_str);
                     return false;
                 }
-                
-                coefs[(chars[i] as usize) - ('0' as usize)] += coef;
-                i += 1
+            };
+            if i >= chars.len() || chars[i] != '*' {
+                coefs[0] += coef;
+                continue;
             }
-        } else if i <= chars.len() {
-            coefs[0] += coef;
+            i += 1;
+        } else {
+            coef = 1.0;
+        }
+
+        if i == chars.len() || chars[i] != 'X' && chars[i] != 'x' {
+            eprintln!("Invalid Expression: Expected monomial");
+            return false;
+        }
+        i += 1;
+        if i == chars.len() || chars[i] != '^' {
+            coefs[1] += coef;
+        } else {
+            i += 1;
+            if i == chars.len() || !chars[i].is_digit(10) {
+                eprintln!("Invalid Expression: Expected exponent");
+                return false;
+            }
+            
+            coefs[(chars[i] as usize) - ('0' as usize)] += coef;
+            i += 1
         }
     }
     return true;
