@@ -4,6 +4,7 @@ mod solve;
 use std::env;
 use std::io::{self, Read};
 
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 

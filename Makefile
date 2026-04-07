@@ -39,9 +39,31 @@ $(NAME): $(SRCS) Cargo.toml
 	@echo "  \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ "
 	@echo "$(COLOR_RESET)"
 
-run: $(NAME)
-	@cargo run $(release) -- "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
+bonus: $(SRCS) Cargo.toml
+	@RUSTFLAGS="--cfg bonus" cargo build $(release)
+	@cp target/$(target)/computor ./computor
+	@echo ""
+	@echo "$(COLOR_PINK)"
+	@echo "   _   _   _   _   _   _   _   _     _   _  "
+	@echo "  / \ / \ / \ / \ / \ / \ / \ / \   / \ / \ "
+	@echo " ( C | O | M | P | U | T | O | R ) ( v | 1 )"
+	@echo "  \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ "
+	@echo "$(COLOR_RESET)"
 
+run: $(NAME)
+	./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
+	@echo "------------------------------------------------------"
+	./computor "5 * X^0 + 4 * X^1 = 4 * X^0"
+	@echo "------------------------------------------------------"
+	./computor "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0"
+	@echo "------------------------------------------------------"
+	./computor "6 * X^0 = 6 * X^0"
+	@echo "------------------------------------------------------"
+	./computor "10 * X^0 = 15 * X^0"
+	@echo "------------------------------------------------------"
+	./computor "1 * X^0 + 2 * X^1 + 5 * X^2 = 0"
+	@echo "------------------------------------------------------"
+	./computor "5 + 4 * X + X^2 = X^2"
 clean:
 	@cargo clean
 

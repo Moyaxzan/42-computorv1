@@ -1,10 +1,13 @@
 [package]
-name = "computorv1"
-version = "0.1.0"
-edition = "2024"
+	name = "computorv1"
+	version = "0.1.0"
+	edition = "2024"
 
 [[bin]]
-name = "computor"
-path = "src/main.rs"
+	name = "computor"
+	path = "src/main.rs"
+
+[lints.rust]
+	unexpected_cfgs = { level = "warn", check-cfg = ['cfg(bonus)'] }
 
 [dependencies]

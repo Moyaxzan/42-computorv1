@@ -23,7 +23,6 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
         
         let coef;
 
-        //TODO parse X^n
         if start != i {
             // Convert char range to string and parse as f64
             let number_str: String = chars[start..i].iter().collect();

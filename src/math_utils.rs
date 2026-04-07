@@ -38,15 +38,39 @@ fn sqrtf(val: f64) -> f64 {
 }
 
 pub fn deg_one_solution(px: &Polynomial) -> f64 {
+    if cfg!(bonus) {
+        println!("");
+        println!("x = -c / b");
+        println!("x = -{} / {}", px.c, px.b);
+        println!("x = {}", -px.c / px.b);
+        println!("");
+    }
     return -px.c / px.b;
 }
 
 pub fn get_delta(px: &Polynomial) -> f64 {
-    return squaref(px.b) - (4.0 * px.a * px.c);
+
+    let delta = squaref(px.b) - (4.0 * px.a * px.c);
+    if cfg!(bonus) {
+        println!("");
+        println!("Δ = b^2 - 4ac");
+        println!("Δ = {}^2 - 4 * {} * {}", px.b, px.a, px.c);
+        println!("Δ = {}", delta);
+        println!("");
+    }
+    return delta;
 }
 
 pub fn one_r_solution(px: &Polynomial) -> f64 {
-    return -px.b / (2.0 * px.a);
+    let res = -px.b / (2.0 * px.a);
+    if cfg!(bonus) {
+        println!("");
+        println!("x1 = -b / 2a");
+        println!("x1 = -{} / (2 * {})", px.b, px.a);
+        println!("x1 = {}", res);
+        println!("");
+    }
+    return res;
 }
 
 fn my_gcd(first: i64, second:i64) -> i64 {
@@ -127,13 +151,23 @@ pub fn r_solutions(px: &Polynomial, delta: &f64) -> String {
         format!("{}/{}", num_s2, den)
     };
 
+    if cfg!(bonus) {
+        println!("");
+        println!("x1 = (-b + √Δ) / 2a");
+        println!("x1 = (-{} + √{}) / (2 * {})", px.b, delta, px.a);
+        println!("x1 = {}", s1);
+        println!("");
+        println!("x2 = (-b + √Δ) / 2a");
+        println!("x2 = (-{} - √{}) / (2 * {})", px.b, delta, px.a);
+        println!("x2 = {}", s2);
+        println!("");
+    }
     return format!("{}\n{}", s2, s1);
 }
 
 pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
     let real_frac = irr_frac(-px.b, 2.0 * px.a);
     let comp_frac = irr_frac(sqrtf(absf(*delta)), 2.0 * px.a);
-
     let real_num = real_frac.0;
     let real_den = real_frac.1;
     let comp_num = comp_frac.0;
@@ -149,21 +183,36 @@ pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
         format!("{}/{}", real_num, real_den)
     };
 
-    let comp = if comp_num / 1000 > 1 || comp_den / 1000 > 1 {
-        format!("{:.6}i", sqrtf(absf(*delta)) / 2.0 * px.a)
+    let (comp_sign, comp) = if comp_num / 1000 > 1 || comp_den / 1000 > 1 {
+        let val = sqrtf(absf(*delta)) / 2.0 * px.a;
+        if val < 0.0 { ("-", format!("{:.6}i", -val)) }
+        else         { ("+", format!("{:.6}i",  val)) }
     } else if comp_den == 1 {
-        format!("{}i", comp_num)
+        if comp_num < 0 { ("-", format!("{}i", -comp_num)) }
+        else            { ("+", format!("{}i",  comp_num)) }
     } else if comp_den == -1 {
-        format!("{}i", -comp_num)
+        if comp_num < 0 { ("+", format!("{}i",  comp_num)) }
+        else            { ("-", format!("{}i",  comp_num)) }
     } else {
-        format!("{}i/{}", comp_num, comp_den)
+        if comp_num < 0 { ("-", format!("{}i/{}", -comp_num, comp_den)) }
+        else            { ("+", format!("{}i/{}",  comp_num, comp_den)) }
     };
 
+    let neg_sign = if comp_sign == "+" { "-" } else { "+" };
+    if cfg!(bonus) {
+        println!("");
+        println!("x1 = -b / 2a + √Δi / 2a");
+        println!("x1 = {} / (2 * {}) + √{}i / (2 * {})", -px.b, px.a, delta, px.a);
+        println!("x1 = {} {} {}", real, comp_sign, comp);
+        println!("");
+        println!("x2 = -b / 2a - √Δi / 2a");
+        println!("x2 = {} / (2 * {}) - √{}i / (2 * {})", -px.b, px.a, delta, px.a);
+        println!("x2 = {} {} {}", real, neg_sign, comp);
+        println!("");
+    }
     return format!(
-        "{} + {}\n{} - {}",
-        real,
-        comp,
-        real,
-        comp
+        "{} {} {}\n{} {} {}",
+        real, comp_sign, comp,
+        real, neg_sign,  comp
     );
 }
