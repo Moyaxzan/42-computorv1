@@ -37,15 +37,30 @@ fn sqrtf(val: f64) -> f64 {
     return n;
 }
 
-pub fn deg_one_solution(px: &Polynomial) -> f64 {
+pub fn deg_one_solution(px: &Polynomial) -> String {
     if cfg!(bonus) {
         println!("");
         println!("x = -c / b");
         println!("x = -{} / {}", px.c, px.b);
         println!("x = {}", -px.c / px.b);
         println!("");
+
+        let frac = irr_frac(px.c, px.b);
+        let s1 = if frac.0 / 10000 > 1 ||  frac.1 / 10000 > 1 {
+            format!("{:.6}", -px.c / px.b)
+        } else if frac.1 == 1 {
+            format!("{}", frac.0)
+        } else if frac.1 == -1 {
+            format!("{}", -frac.0)
+        } else if -px.c / px.b < -f64::EPSILON {
+            format!("-{}/{}", frac.0, frac.1)
+        } else {
+            format!("{}/{}", frac.0, frac.1)
+        }
+        ;
+        return s1;
     }
-    return -px.c / px.b;
+    return format!("{}", -px.c / px.b);
 }
 
 pub fn get_delta(px: &Polynomial) -> f64 {
@@ -61,7 +76,7 @@ pub fn get_delta(px: &Polynomial) -> f64 {
     return delta;
 }
 
-pub fn one_r_solution(px: &Polynomial) -> f64 {
+pub fn one_r_solution(px: &Polynomial) -> String {
     let res = -px.b / (2.0 * px.a);
     if cfg!(bonus) {
         println!("");
@@ -69,8 +84,23 @@ pub fn one_r_solution(px: &Polynomial) -> f64 {
         println!("x1 = -{} / (2 * {})", px.b, px.a);
         println!("x1 = {}", res);
         println!("");
+
+        let frac = irr_frac(px.b, 2.0 * px.a);
+        let s1 = if frac.0 / 10000 > 1 ||  frac.1 / 10000 > 1 {
+            format!("{:.6}", -px.c / px.b)
+        } else if frac.1 == 1 {
+            format!("{}", frac.0)
+        } else if frac.1 == -1 {
+            format!("{}", -frac.0)
+        } else if -px.c / px.b < -f64::EPSILON {
+            format!("-{}/{}", frac.0, frac.1)
+        } else {
+            format!("{}/{}", frac.0, frac.1)
+        }
+        ;
+        return s1;
     }
-    return res;
+    return format!("{}", res);
 }
 
 fn my_gcd(first: i64, second:i64) -> i64 {
@@ -125,31 +155,27 @@ fn irr_frac(num: f64, den: f64) -> (i64, i64) {
 
 pub fn r_solutions(px: &Polynomial, delta: &f64) -> String {
     let sqrt_delta = sqrtf(*delta);
-    let num_s1 = -px.b + sqrt_delta;
-    let num_s2 = -px.b - sqrt_delta;
     let den = 2.0 * px.a;
 
-    let s1_frac = irr_frac(num_s1, den); // -b + √Δ / 2a
-    let s2_frac = irr_frac(num_s2, den); // -b - √Δ / 2a
-    let s1 = if s1_frac.0 / 10000 > 1 ||  s1_frac.1 / 10000 > 1 {
-        format!("{:.6}", num_s1 / den)
-    } else if s1_frac.1 == 1 {
-        format!("{}", s1_frac.0)
-    } else if s1_frac.1 == -1 {
-        format!("{}", -s1_frac.0)
-    } else {
-        format!("{}/{}", s1_frac.0, s1_frac.1)
+    let s1_frac = irr_frac(-px.b + sqrt_delta, den);
+    let s2_frac = irr_frac(-px.b - sqrt_delta, den);
+
+    let format_frac = |num: i64, den: i64, val: f64| -> String {
+        if num / 10000 > 1 || den / 10000 > 1 {
+            format!("{:.6}", val)
+        } else if den == 1 {
+            format!("{}", num)
+        } else if den == -1 {
+            format!("{}", -num)
+        } else if val < -f64::EPSILON {
+            format!("-{}/{}", num, den)
+        } else {
+            format!("{}/{}", num, den)
+        }
     };
 
-    let s2 = if s2_frac.0 / 10000 > 1 ||  s2_frac.1 / 10000 > 1 {
-        format!("{:.6}", num_s2 / den)
-    } else if s2_frac.1 == 1 {
-        format!("{}", s2_frac.0)
-    } else if s2_frac.1 == -1 {
-        format!("{}", -s2_frac.0)
-    } else {
-        format!("{}/{}", num_s2, den)
-    };
+    let s1 = format_frac(s1_frac.0, s1_frac.1, (-px.b + sqrt_delta) / den);
+    let s2 = format_frac(s2_frac.0, s2_frac.1, (-px.b - sqrt_delta) / den);
 
     if cfg!(bonus) {
         println!("");
@@ -157,12 +183,13 @@ pub fn r_solutions(px: &Polynomial, delta: &f64) -> String {
         println!("x1 = (-{} + √{}) / (2 * {})", px.b, delta, px.a);
         println!("x1 = {}", s1);
         println!("");
-        println!("x2 = (-b + √Δ) / 2a");
+        println!("x2 = (-b - √Δ) / 2a");
         println!("x2 = (-{} - √{}) / (2 * {})", px.b, delta, px.a);
         println!("x2 = {}", s2);
         println!("");
     }
-    return format!("{}\n{}", s2, s1);
+
+    return format!("{}\n{}", s2, s1)
 }
 
 pub fn c_solutions(px: &Polynomial, delta: &f64) -> String {
