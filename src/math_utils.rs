@@ -65,7 +65,7 @@ pub fn deg_one_solution(px: &Polynomial) -> String {
 
 pub fn get_delta(px: &Polynomial) -> f64 {
 
-    let delta = squaref(px.b) - (4.0 * px.a * px.c);
+    let delta = ((squaref(px.b) - (4.0 * px.a * px.c)) * 1_000_000.0).round() / 1_000_000.0;
     if cfg!(bonus) {
         println!("");
         println!("Δ = b^2 - 4ac");

@@ -3,6 +3,10 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
 
     let mut i: usize = 0;
     let chars: Vec<char> = arg.chars().collect();
+    if chars.len() == 0 {
+        eprintln!("Invalid Expression: Expected polynomial");
+        return false
+    }
     while i < chars.len() {
         if chars[i] == '-' {
             mult = -1.0;
@@ -11,7 +15,7 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
             mult = 1.0;
             i += 1;
         } else if i != 0 { // no sign only allowed for 1st elem
-            eprintln!("Invalid Expression: Expected sign");
+            eprintln!("Invalid Expression '{}' : Expected sign", chars[i]);
             return false;
         }
 
@@ -29,7 +33,7 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
             coef = match number_str.parse::<f64>() {
                 Ok(n) => n * mult,
                 Err(_) => {
-                    eprintln!("Invalid number: {}", number_str);
+                    eprintln!("Invalid number: '{}'", number_str);
                     return false;
                 }
             };
@@ -52,7 +56,7 @@ fn parse_polynomial(arg: &str, coefs: &mut [f64; 10]) -> bool {
         } else {
             i += 1;
             if i == chars.len() || !chars[i].is_digit(10) {
-                eprintln!("Invalid Expression: Expected exponent");
+                eprintln!("Invalid Expression : Expected exponent");
                 return false;
             }
             
@@ -80,7 +84,7 @@ pub fn parse_argument(arg: &String) -> (bool, [f64; 10], [f64; 10])
             }
         }
         None => {
-            eprintln!("Expression must have an = symbol");
+            eprintln!("Expression must have an '=' symbol");
             return (false, left_coefs, right_coefs);  // No '=' found
         }
     }
