@@ -121,12 +121,19 @@ make run  # Runs all test cases
 ## 📁 Project Structure
 computorv1/
 ├── Cargo.toml      # Rust project configuration
+
 ├── Makefile        # Build automation
+
 └── src/
-├── main.rs         # Entry point
-├── parsing.rs      # Equation parser
-├── math_utils.rs   # Polynomial struct and utilities
-└── solve.rs        # Equation solver logic
+
+├──── main.rs         # Entry point
+
+├──── parsing.rs      # Equation parser
+
+├──── math_utils.rs   # Polynomial struct and utilities
+
+└──── solve.rs        # Equation solver logic
+
 
 ## 🔧 Implementation Details
 
